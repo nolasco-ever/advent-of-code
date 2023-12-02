@@ -3,6 +3,7 @@ const readLine = require("readline");
 
 const path = "./part2.txt";
 
+// array of key/value pairs that have a number assigned to it's word version
 const stringNumsArr = [
   { str: "one", num: 1 },
   { str: "two", num: 2 },
@@ -25,22 +26,31 @@ const findSum = (filePath) => {
   return new Promise((resolve) => {
     let total = 0;
 
-    rL.on("line", (str) => {
-      const newStr = stringNumsArr.reduce((accString, numObj) => {
+    rL.on("line", (line) => {
+      // Replace word representations of numbers with actual numbers using the stringNumsArr
+      // i.e "fivetwofour" -> "524"
+      const newLine = stringNumsArr.reduce((accString, numObj) => {
         return accString.replace(numObj.str, numObj.num);
-      }, str);
+      }, line);
 
-      const strArr = [...newStr];
+      //create an array of characters from the line
+      const lineArr = [...newLine];
 
+      // array to hold all the numbers found in the lineArr
       const numArr = [];
 
-      strArr.forEach((item) => {
-        if (!isNaN(item)) {
-          numArr.push(item);
+      lineArr.forEach((lineItem) => {
+        // if the character is a number, then we add it to the numArr
+        if (!isNaN(lineItem)) {
+          numArr.push(lineItem);
         }
       });
 
+      // concat the first and last number strings and convert to a number
+      // i.e. "1"+"2" = "12" -> 12
       const num = Number(numArr[0] + numArr[numArr.length - 1]);
+
+      // add the number to the total
       total += num;
     });
 

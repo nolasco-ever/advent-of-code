@@ -26,18 +26,9 @@ const findSum = (filePath) => {
     let total = 0;
 
     rL.on("line", (str) => {
-      const sortedArr = [...stringNumsArr].sort((a, b) => {
-        const indexA = str.indexOf(a.str);
-        const indexB = str.indexOf(b.str);
-        return indexA - indexB;
-      });
-
-      let newStr = str;
-
-      sortedArr.forEach((numObj) => {
-        const regex = new RegExp(numObj.str, "g");
-        newStr = newStr.replace(regex, numObj.num);
-      });
+      const newStr = stringNumsArr.reduce((accString, numObj) => {
+        return accString.replace(numObj.str, numObj.num);
+      }, str);
 
       const strArr = [...newStr];
 
